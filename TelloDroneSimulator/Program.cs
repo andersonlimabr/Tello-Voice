@@ -63,7 +63,7 @@ namespace TelloDroneSimulator
                 case "battery?":
                     {
                         var retval = battery;
-                        battery -= 10;
+                        battery -= 1;
                         if(battery < 0)
                         {
                             battery = 0;

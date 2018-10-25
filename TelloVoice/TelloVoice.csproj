@@ -97,5 +97,20 @@
       <Name>TelloSDKStandard</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Color_gradient_illustrating_a_sorites_paradox.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Color_gradient_illustrating_a_sorites_paradox1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Color_gradient_illustrating_a_sorites_paradox2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Color_gradient_illustrating_a_sorites_paradox3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tello-header.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

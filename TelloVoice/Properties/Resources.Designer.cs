@@ -63,6 +63,46 @@ namespace TelloVoice.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Color_gradient_illustrating_a_sorites_paradox {
+            get {
+                object obj = ResourceManager.GetObject("Color_gradient_illustrating_a_sorites_paradox", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Color_gradient_illustrating_a_sorites_paradox1 {
+            get {
+                object obj = ResourceManager.GetObject("Color_gradient_illustrating_a_sorites_paradox1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Color_gradient_illustrating_a_sorites_paradox2 {
+            get {
+                object obj = ResourceManager.GetObject("Color_gradient_illustrating_a_sorites_paradox2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Color_gradient_illustrating_a_sorites_paradox3 {
+            get {
+                object obj = ResourceManager.GetObject("Color_gradient_illustrating_a_sorites_paradox3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap dji_tello__1_ {
             get {
                 object obj = ResourceManager.GetObject("dji-tello (1)", resourceCulture);
@@ -76,6 +116,16 @@ namespace TelloVoice.Properties {
         internal static System.Drawing.Bitmap download {
             get {
                 object obj = ResourceManager.GetObject("download", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tello_header {
+            get {
+                object obj = ResourceManager.GetObject("tello-header", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
