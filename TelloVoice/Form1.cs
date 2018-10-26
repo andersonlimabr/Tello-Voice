@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Speech.Recognition;
-using TelloSdkStandard;
+
 
 namespace TelloVoice
 {
@@ -19,9 +19,10 @@ namespace TelloVoice
         static SpeechRecognitionEngine reconhecedor;
         SpeechSynthesizer resposta = new SpeechSynthesizer();
         static CultureInfo culture = new CultureInfo("pt-BR");
-
         Color cor = Color.Green;
         Color novaCor;
+
+        TelloProxy proxy = new TelloProxy("192.168.10.1", 8889);
 
         public Form1()
         {
@@ -35,7 +36,18 @@ namespace TelloVoice
             led.Visible = false;
             Application.DoEvents();
 
-            string[] listaPalavras = { "decolar", "pousar", "girar", "frente", "tras", "bateria", "foda-se", "cambalhota" };
+            string[] listaPalavras = { "decolar", "pousar", "bateria", "foda-se", "conectar" };
+            string[] listaComandosRetos = { "para frente", "para tras", "subir", "descer", "para cima", "para baixo"};
+            string[] listaComandosGiro = { "girar" };
+            string[] listaComandosDiracao = { "para esquerda", "para direita", "a esquerda", "a direita" };
+            string[] valores =new string[480];
+
+            
+            for (int i=20; i < 500; i++)
+            {
+                valores[i-20] =(i).ToString();
+            }
+
 
             try
             {
@@ -46,18 +58,9 @@ namespace TelloVoice
                 throw;
             }
 
-            var gramatica = new Choices();
-
-            gramatica.Add(listaPalavras);
-
-            var gb = new GrammarBuilder();
-            gb.Append(gramatica);
-
-            var g = new Grammar(gb);
-
 
             reconhecedor.RequestRecognizerUpdate();
-            reconhecedor.LoadGrammarAsync(g);
+
             reconhecedor.SpeechRecognized += Reconhecedor_SpeechRecognized;
             reconhecedor.SpeechHypothesized += Reconhecedor_SpeechHypothesized;
             reconhecedor.SpeechRecognitionRejected += Reconhecedor_SpeechRecognitionRejected;
@@ -65,10 +68,71 @@ namespace TelloVoice
             reconhecedor.AudioLevelUpdated += Reconhecedor_AudioLevelUpdated;
 
 
+
+            var gramaticaNumeros = new Choices();
+            gramaticaNumeros.Add(valores);
+
+            var gramaticaDirecao = new Choices();
+            gramaticaDirecao.Add(listaComandosDiracao);
+
+            var gramatica = new Choices();
+            gramatica.Add(listaPalavras);
+            var gb = new GrammarBuilder();
+            gb.Append(gramatica);
+
+            var gramaticaComandosGiro = new Choices();
+            gramaticaComandosGiro.Add(listaComandosGiro);
+
+            var gramaticaComandosRetos = new Choices();
+            gramaticaComandosRetos.Add(listaComandosRetos);
+
+
+            var gbComandosGiro = new GrammarBuilder();
+            gbComandosGiro.Append(gramaticaComandosGiro);
+            gbComandosGiro.Append(gramaticaNumeros);
+            gbComandosGiro.Append("graus");
+            gbComandosGiro.Append(gramaticaDirecao);
+
+
+            var gbComandosRetos = new GrammarBuilder();
+            gbComandosRetos.Append(gramaticaComandosRetos);
+            gbComandosRetos.Append(gramaticaNumeros);
+            gbComandosRetos.Append("centímetros");
+
+            reconhecedor.LoadGrammarCompleted += Reconhecedor_LoadGrammarCompleted;
+
+
+
+            var g = new Grammar(gb);
+            var gComandos = new Grammar(gbComandosRetos);
+            var gComandosGiro = new Grammar(gbComandosGiro);
+            gComandosGiro.Name = "giro";
+            reconhecedor.LoadGrammarAsync(g);
+            reconhecedor.LoadGrammarAsync(gComandos);
+            reconhecedor.LoadGrammarAsync(gComandosGiro);
+
+
+
             reconhecedor.SetInputToDefaultAudioDevice();
             resposta.SetOutputToDefaultAudioDevice();
 
             reconhecedor.RecognizeAsync(RecognizeMode.Multiple);
+        }
+
+        private void Reconhecedor_LoadGrammarCompleted(object sender, LoadGrammarCompletedEventArgs e)
+        {
+            if (e.Grammar.Name == "giro")
+            {
+                resposta.Rate = 5;
+                resposta.SpeakAsync("Olá, Lucas. Pronto para se divertir?");
+                resposta.Rate = 3;
+                resposta.SpeakAsync("Estou pronta. Me diga o que fazer.");
+                resposta.Rate = 5;
+
+                lblStatus.Text = "Aguardando comandos: ";
+                led.Visible = true;
+                Application.DoEvents();
+            }
         }
 
         private void Reconhecedor_SpeechRecognitionRejected(object sender, SpeechRecognitionRejectedEventArgs e)
@@ -99,11 +163,10 @@ namespace TelloVoice
             lblStatus.Text = "Comando recebido: " + frase;
             Application.DoEvents();
 
-            var wrapper = SdkWrapper.Instance;
+ 
 
             if (!string.IsNullOrEmpty(e.Result.Text))
             {
-                TelloSdkStandard.actions.Action action = null;
                 try
                 {
                     switch (frase)
@@ -111,51 +174,68 @@ namespace TelloVoice
                         case "foda-se":
                             {
                                 resposta.Speak("Foda-se você, seu babaca.");
-                                action = wrapper.BaseActions.TakeOff();
+                                
                                 break;
                             }
                         case "decolar":
                             {
-                                resposta.Speak("Ok, Decolando.");
-                                action = wrapper.BaseActions.TakeOff();
+                                resposta.Speak("Decolando...");
+                                var voando = proxy.Decolar();
+                                if (voando)
+                                {
+                                    resposta.Speak("Drone em voo");
+                                }
+                                else
+                                {
+                                    resposta.Speak("Não foi possível decolar.");
+                                }
+                                break;
+                            }
+                        case "conectar":
+                            {
+                                resposta.Speak("Conectando...");
+                                var conectado = proxy.Connect();
+                                if (conectado)
+                                {
+                                    resposta.Speak("Estamos prontos");
+                                }
+                                else
+                                {
+                                    resposta.Speak("Não foi possível conectar.");
+                                }
                                 break;
                             }
                         case "pousar":
                             {
                                 resposta.Speak("Ok, pousando o drone.");
-                                action = wrapper.BaseActions.Land();
 
                                 break;
                             }
                         case "cambalhota":
                             {
                                 resposta.Speak("Girando");
-                                action = wrapper.FlipActions.FlipBackLeft();
                                 break;
                             }
                         case "frente":
                             {
                                 resposta.Speak("Para frente 50 centímetros.");
-                                action = wrapper.FlyActions.FlyForward(50);
                                 break;
                             }
                         case "tras":
                             {
                                 resposta.Speak("Para trás 50 centímetros.");
-                                action = wrapper.FlyActions.FlyBack(50);
                                 break;
                             }
                         case "girar":
                             {
-                                action = wrapper.RotationActions.RotateClockwise(360);
                                 break;
                             }
                         case "bateria":
                             {
-                                var resp = wrapper.BaseActions.QueryBattery().Execute();
-                                if (resp == SdkWrapper.SdkReponses.OK)
+                               var resp= proxy.GetBattery();
+                                if (resp !=0)
                                 {
-                                    resposta.SpeakAsync(wrapper.BaseActions.QueryBattery().ServerResponse);
+                                    resposta.SpeakAsync("Bateria com " + resp + "%");
                                 }
                                 break;
                             }
@@ -170,17 +250,7 @@ namespace TelloVoice
                             }
 
                     }
-                    if (action != null)
-                    {
-                        var resp1 = action.Execute();
-                        if (resp1 == SdkWrapper.SdkReponses.FAIL)
-                        {
-                            if (action.LastException != null)
-                            {
-                                throw action.LastException;
-                            }
-                        }
-                    }
+           
 
                 }
                 catch (Exception ex)
@@ -196,8 +266,13 @@ namespace TelloVoice
 
         private void Init()
         {
+            lblStatus.Text = "Carregando gramática... ";
+            Application.DoEvents();
+
             resposta.Volume = 100;
             Gramatica();
+
+
         }
 
 
@@ -205,16 +280,6 @@ namespace TelloVoice
         {
             lblStatus.Text = "";
             Init();
-
-            resposta.Rate = 4;
-            resposta.SpeakAsync("Olá, Lucas. Pronto para se divertir?");
-            resposta.Rate = 2;
-            resposta.SpeakAsync("Estou pronta. Me diga o que fazer.");
-
-
-            lblStatus.Text = "Aguardando comandos: ";
-            led.Visible = true;
-            Application.DoEvents();
         }
 
         private void pbVol_Click(object sender, EventArgs e)
@@ -230,14 +295,14 @@ namespace TelloVoice
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            var wrapper = SdkWrapper.Instance;
+            //var wrapper = SdkWrapper.Instance;
 
-            TelloSdkStandard.actions.Action action = null;
-            var resp = wrapper.BaseActions.QueryBattery().Execute();
-            if (resp == SdkWrapper.SdkReponses.OK)
-            {
-                lblBateria.Text = "Bateria:" +  wrapper.BaseActions.QueryBattery().ServerResponse +"%";
-            }
+            //TelloSdkStandard.actions.Action action = null;
+            //var resp = wrapper.BaseActions.QueryBattery().Execute();
+            //if (resp == SdkWrapper.SdkReponses.OK)
+            //{
+            //    lblBateria.Text = "Bateria:" +  wrapper.BaseActions.QueryBattery().ServerResponse +"%";
+            //}
         }
 
     }

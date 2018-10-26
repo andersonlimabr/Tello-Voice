@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelloDroneSimulator", "TelloDroneSimulator\TelloDroneSimulator.csproj", "{99D269ED-4031-40DB-8EA3-335AA053C5A1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelloVoice", "TelloVoice\TelloVoice.csproj", "{6A4562EA-8194-48A4-8668-15FDF4A5546A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelloSDKStandard", "TelloSDKStandard\TelloSDKStandard.csproj", "{831B7070-74ED-401D-ABB8-1B18B3BD0A28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelloSDKStandard", "TelloSDKStandard\TelloSDKStandard.csproj", "{C2D4E87E-9123-4E47-AD8C-D10A99A49EDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{99D269ED-4031-40DB-8EA3-335AA053C5A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99D269ED-4031-40DB-8EA3-335AA053C5A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99D269ED-4031-40DB-8EA3-335AA053C5A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99D269ED-4031-40DB-8EA3-335AA053C5A1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A4562EA-8194-48A4-8668-15FDF4A5546A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A4562EA-8194-48A4-8668-15FDF4A5546A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A4562EA-8194-48A4-8668-15FDF4A5546A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A4562EA-8194-48A4-8668-15FDF4A5546A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{831B7070-74ED-401D-ABB8-1B18B3BD0A28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{831B7070-74ED-401D-ABB8-1B18B3BD0A28}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{831B7070-74ED-401D-ABB8-1B18B3BD0A28}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{831B7070-74ED-401D-ABB8-1B18B3BD0A28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2D4E87E-9123-4E47-AD8C-D10A99A49EDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2D4E87E-9123-4E47-AD8C-D10A99A49EDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2D4E87E-9123-4E47-AD8C-D10A99A49EDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2D4E87E-9123-4E47-AD8C-D10A99A49EDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

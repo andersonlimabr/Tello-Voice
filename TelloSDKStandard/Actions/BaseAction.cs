@@ -32,8 +32,8 @@ namespace TelloSdkStandard.actions
             IPEndPoint _endpoint;
             
 
-            //_ipaddress = IPAddress.Parse("10.90.40.39");
-            //_endpoint = new IPEndPoint(_ipaddress, 8889);
+            //_ipaddress = IPAddress.Parse("192.168.10.1");
+             //_endpoint = new IPEndPoint(_ipaddress, 8889);
             //_client = new TelloUdpClient(_ipaddress, _endpoint);
 
 

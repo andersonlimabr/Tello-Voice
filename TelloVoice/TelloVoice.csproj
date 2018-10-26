@@ -59,6 +59,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TelloProxy.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -90,12 +91,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\dji-tello %281%29.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TelloSDKStandard\TelloSDKStandard.csproj">
-      <Project>{831b7070-74ed-401d-abb8-1b18b3bd0a28}</Project>
-      <Name>TelloSDKStandard</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Color_gradient_illustrating_a_sorites_paradox.png" />

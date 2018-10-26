@@ -41,7 +41,7 @@ namespace TelloSdkStandard.actions
         }
         public Action TakeOff() => _actionCache["takeoff"];
         public Action Land() => _actionCache["land"];
-        internal Action CommandMode() => _actionCache["command"];
+        public Action CommandMode() => _actionCache["command"];
         public Action QuerySpeed() => _actionCache["speed?"];
         public Action QueryBattery() => _actionCache["battery?"];
         public Action QueryFlightTime() => _actionCache["time?"];
