@@ -84,7 +84,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\download.jpg" />
@@ -106,6 +108,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\tello-header.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TelloLib\TelloLib.csproj">
+      <Project>{fc69241f-8c76-45de-a2d4-b2a5cd984014}</Project>
+      <Name>TelloLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

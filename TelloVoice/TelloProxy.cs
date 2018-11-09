@@ -88,9 +88,9 @@ namespace TelloVoice
             return Encoding.ASCII.GetString(receiveBytes);
         }
 
-        public int GetBattery()
+        public int Bateria()
         {
-            _serverReponse = ExecuteCommand("battery?");
+            _serverReponse = ExecuteCommand("height?");
 
             if (_serverReponse == "FAIL")
             {
@@ -101,13 +101,138 @@ namespace TelloVoice
                 return int.Parse(_serverReponse);
             }
         }
-  
+        public int Velocidade()
+        {
+            _serverReponse = ExecuteCommand("speed?");
+
+            if (_serverReponse == "FAIL")
+            {
+                return 0;
+            }
+            else
+            {
+                return int.Parse(_serverReponse);
+            }
+        }
+        public int Temperatura()
+        {
+            _serverReponse = ExecuteCommand("temp?");
+
+            if (_serverReponse == "FAIL")
+            {
+                return 0;
+            }
+            else
+            {
+                return int.Parse(_serverReponse);
+            }
+        }
+
+        public int Altura()
+        {
+            _serverReponse = ExecuteCommand("height?");
+
+            if (_serverReponse == "FAIL")
+            {
+                return 0;
+            }
+            else
+            {
+                return int.Parse(_serverReponse);
+            }
+        }
+
         public void Close()
         {
             _client.Close();
             _client.Dispose();
         }
 
+        public bool Subir(int valor)
+        {
+            _serverReponse = ExecuteCommand("up "+ valor);
 
+            if (_serverReponse == "FAIL")
+            {
+                _commandMode = false;
+            }
+            else
+            {
+                _commandMode = true;
+            }
+
+            return _commandMode;
+        }
+
+        public bool Tras(int valor)
+        {
+            _serverReponse = ExecuteCommand("back " + valor);
+
+            if (_serverReponse == "FAIL")
+            {
+                _commandMode = false;
+            }
+            else
+            {
+                _commandMode = true;
+            }
+
+            return _commandMode;
+        }
+
+        public bool Frente(int valor)
+        {
+            _serverReponse = ExecuteCommand("forward " + valor);
+
+            if (_serverReponse == "FAIL")
+            {
+                _commandMode = false;
+            }
+            else
+            {
+                _commandMode = true;
+            }
+
+            return _commandMode;
+        }
+
+        public bool Descer(int valor)
+        {
+            _serverReponse = ExecuteCommand("down " + valor);
+
+            if (_serverReponse == "FAIL")
+            {
+                _commandMode = false;
+            }
+            else
+            {
+                _commandMode = true;
+            }
+
+            return _commandMode;
+        }
+
+        public bool Girar(int valor, string direcao)
+        {
+           if (direcao=="e")
+            {
+                _serverReponse = ExecuteCommand("cw " + valor);
+            }
+           else
+            {
+                _serverReponse = ExecuteCommand("ccw " + valor);
+            }
+
+            if (_serverReponse == "FAIL")
+            {
+                _commandMode = false;
+            }
+            else
+            {
+                _commandMode = true;
+            }
+
+            return _commandMode;
+        }
     }
 }

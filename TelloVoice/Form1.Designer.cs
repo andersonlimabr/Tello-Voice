@@ -34,11 +34,16 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.led = new System.Windows.Forms.PictureBox();
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.lblBateria = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblDados = new System.Windows.Forms.Label();
+            this.printDialog1 = new System.Windows.Forms.PrintDialog();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbCor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.led)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // lblStatus
@@ -88,11 +93,6 @@
             this.led.TabStop = false;
             this.led.Visible = false;
             // 
-            // timer2
-            // 
-            this.timer2.Interval = 1500;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
-            // 
             // lblBateria
             // 
             this.lblBateria.AutoSize = true;
@@ -104,12 +104,46 @@
             this.lblBateria.Size = new System.Drawing.Size(0, 15);
             this.lblBateria.TabIndex = 5;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.BackColor = System.Drawing.Color.Black;
+            this.groupBox1.Controls.Add(this.lblDados);
+            this.groupBox1.ForeColor = System.Drawing.Color.White;
+            this.groupBox1.Location = new System.Drawing.Point(804, 5);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(213, 342);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Dados do Trello";
+            // 
+            // lblDados
+            // 
+            this.lblDados.Location = new System.Drawing.Point(8, 20);
+            this.lblDados.Name = "lblDados";
+            this.lblDados.Size = new System.Drawing.Size(192, 311);
+            this.lblDados.TabIndex = 0;
+            this.lblDados.Text = "dados";
+            // 
+            // printDialog1
+            // 
+            this.printDialog1.UseEXDialog = true;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Location = new System.Drawing.Point(404, 72);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(317, 219);
+            this.pictureBox2.TabIndex = 7;
+            this.pictureBox2.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::TelloVoice.Properties.Resources.tello_header;
             this.ClientSize = new System.Drawing.Size(1025, 349);
+            this.Controls.Add(this.pictureBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lblBateria);
             this.Controls.Add(this.led);
             this.Controls.Add(this.pictureBox1);
@@ -122,6 +156,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbCor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.led)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -134,8 +170,11 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox led;
-        private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.Label lblBateria;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label lblDados;
+        private System.Windows.Forms.PrintDialog printDialog1;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }
 

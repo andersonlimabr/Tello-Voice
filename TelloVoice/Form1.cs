@@ -4,13 +4,14 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Speech.Synthesis;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Speech.Recognition;
-
+using TelloLib;
 
 namespace TelloVoice
 {
@@ -22,7 +23,7 @@ namespace TelloVoice
         Color cor = Color.Green;
         Color novaCor;
 
-        TelloProxy proxy = new TelloProxy("192.168.10.1", 8889);
+       // TelloProxy proxy = new TelloProxy("192.168.10.1", 8889);
 
         public Form1()
         {
@@ -36,16 +37,25 @@ namespace TelloVoice
             led.Visible = false;
             Application.DoEvents();
 
-            string[] listaPalavras = { "decolar", "pousar", "bateria", "foda-se", "conectar" };
-            string[] listaComandosRetos = { "para frente", "para tras", "subir", "descer", "para cima", "para baixo"};
+            string[] listaPalavras = { "decolar", "pousar", "bateria", "foda-se" };
+            string[] listaComandosRetos = { "frente", "tras", "traz", "subir", "descer", "cima", "baixo"};
             string[] listaComandosGiro = { "girar" };
-            string[] listaComandosDiracao = { "para esquerda", "para direita", "a esquerda", "a direita" };
-            string[] valores =new string[480];
+            string[] listaComandosDiracao = { "para esquerda", "para direita"};
+            string[] listaMedidas = { "centímetros", "metros" };
 
-            
+            string[] valores =new string[480];
+            string[] graus = new string[360];
+
+
+
             for (int i=20; i < 500; i++)
             {
                 valores[i-20] =(i).ToString();
+            }
+
+            for (int i = 1; i <= 360; i++)
+            {
+                graus[i-1] = (i).ToString();
             }
 
 
@@ -72,6 +82,13 @@ namespace TelloVoice
             var gramaticaNumeros = new Choices();
             gramaticaNumeros.Add(valores);
 
+            var gramaticaGraus = new Choices();
+            gramaticaGraus.Add(graus);
+
+            var gramaticaMedidas = new Choices();
+            gramaticaMedidas.Add(listaMedidas);
+
+
             var gramaticaDirecao = new Choices();
             gramaticaDirecao.Add(listaComandosDiracao);
 
@@ -89,7 +106,7 @@ namespace TelloVoice
 
             var gbComandosGiro = new GrammarBuilder();
             gbComandosGiro.Append(gramaticaComandosGiro);
-            gbComandosGiro.Append(gramaticaNumeros);
+            gbComandosGiro.Append(gramaticaGraus);
             gbComandosGiro.Append("graus");
             gbComandosGiro.Append(gramaticaDirecao);
 
@@ -97,7 +114,7 @@ namespace TelloVoice
             var gbComandosRetos = new GrammarBuilder();
             gbComandosRetos.Append(gramaticaComandosRetos);
             gbComandosRetos.Append(gramaticaNumeros);
-            gbComandosRetos.Append("centímetros");
+            gbComandosRetos.Append(gramaticaMedidas);
 
             reconhecedor.LoadGrammarCompleted += Reconhecedor_LoadGrammarCompleted;
 
@@ -123,11 +140,11 @@ namespace TelloVoice
         {
             if (e.Grammar.Name == "giro")
             {
-                resposta.Rate = 5;
-                resposta.SpeakAsync("Olá, Lucas. Pronto para se divertir?");
-                resposta.Rate = 3;
-                resposta.SpeakAsync("Estou pronta. Me diga o que fazer.");
-                resposta.Rate = 5;
+                //resposta.Rate = 5;
+                //resposta.SpeakAsync("Olá, Lucas. Pronto para se divertir?");
+                //resposta.Rate = 3;
+                //resposta.SpeakAsync("Estou pronta. Me diga o que fazer.");
+                //resposta.Rate = 5;
 
                 lblStatus.Text = "Aguardando comandos: ";
                 led.Visible = true;
@@ -162,95 +179,114 @@ namespace TelloVoice
             led.Visible = true;
             lblStatus.Text = "Comando recebido: " + frase;
             Application.DoEvents();
-
- 
+            int valor = 0;
+            string[] split;
 
             if (!string.IsNullOrEmpty(e.Result.Text))
             {
                 try
                 {
-                    switch (frase)
+                    if (frase.IndexOf("girar") > -1)
                     {
-                        case "foda-se":
-                            {
-                                resposta.Speak("Foda-se você, seu babaca.");
-                                
-                                break;
-                            }
-                        case "decolar":
-                            {
-                                resposta.Speak("Decolando...");
-                                var voando = proxy.Decolar();
-                                if (voando)
-                                {
-                                    resposta.Speak("Drone em voo");
-                                }
-                                else
-                                {
-                                    resposta.Speak("Não foi possível decolar.");
-                                }
-                                break;
-                            }
-                        case "conectar":
-                            {
-                                resposta.Speak("Conectando...");
-                                var conectado = proxy.Connect();
-                                if (conectado)
-                                {
-                                    resposta.Speak("Estamos prontos");
-                                }
-                                else
-                                {
-                                    resposta.Speak("Não foi possível conectar.");
-                                }
-                                break;
-                            }
-                        case "pousar":
-                            {
-                                resposta.Speak("Ok, pousando o drone.");
+                        split = frase.Split(' ');
+                        valor = int.Parse(split[1]);
+                        string direcao = "";
 
-                                break;
-                            }
-                        case "cambalhota":
-                            {
-                                resposta.Speak("Girando");
-                                break;
-                            }
-                        case "frente":
-                            {
-                                resposta.Speak("Para frente 50 centímetros.");
-                                break;
-                            }
-                        case "tras":
-                            {
-                                resposta.Speak("Para trás 50 centímetros.");
-                                break;
-                            }
-                        case "girar":
-                            {
-                                break;
-                            }
-                        case "bateria":
-                            {
-                               var resp= proxy.GetBattery();
-                                if (resp !=0)
-                                {
-                                    resposta.SpeakAsync("Bateria com " + resp + "%");
-                                }
-                                break;
-                            }
-                        case "8":
-                            {
-                                break;
-                            }
-                        case "9":
-                            {
+                        if (frase.IndexOf("esquerda") > -1)
+                            direcao = "e";
+                        else
+                            direcao = "d";
 
-                                break;
-                            }
+                        resposta.Speak("Drone girando");
+                        Tello.Girar(valor, direcao);
+                    }
+                    else if (frase.IndexOf("frente") > -1)
+                    {
+                        split = frase.Split(' ');
+                        valor = int.Parse(split[1]);
+
+                        if (frase.IndexOf("centímetros")==-1)
+                        {
+                            valor = valor * 100;
+                        }
+                        resposta.Speak("Drone para frente");
+                        Tello.Frente(valor);
+
 
                     }
-           
+                    if (frase.IndexOf("tras") > -1 || frase.IndexOf("traz")>-1)
+                    {
+                        split = frase.Split(' ');
+                        valor = int.Parse(split[1]);
+                        if (frase.IndexOf("centímetros") == -1)
+                        {
+                            valor = valor * 100;
+                        }
+
+                        Tello.Tras(valor);
+                        resposta.Speak("Drone para tras");
+                    }
+                    if (frase.IndexOf("cima") > -1 || frase.IndexOf("subir") > -1)
+                    {
+                        split = frase.Split(' ');
+                        valor = int.Parse(split[1]);
+
+                        if (frase.IndexOf("centímetros") == -1)
+                        {
+                            valor = valor * 100;
+                        }
+
+                        Tello.Subir(valor);
+                        resposta.Speak("Drone para cima");
+                    }
+                    if (frase.IndexOf("baixo") > -1 || frase.IndexOf("descer") > -1)
+                    {
+                        split = frase.Split(' ');
+                        valor = int.Parse(split[1]);
+
+                        if (frase.IndexOf("centímetros") == -1)
+                        {
+                            valor = valor * 100;
+                        }
+
+                        Tello.Descer(valor);
+                        resposta.Speak("Drone para baixo");
+                    }
+                    else
+                    {
+                        switch (frase)
+                        {
+
+                            case "foda-se":
+                                {
+                                    resposta.Speak("Foda-se você, seu babaca.");
+
+                                    break;
+                                }
+                            case "decolar":
+                                {
+                                    resposta.Speak("Decolando...");
+
+                                    Tello.takeOff();
+                                    break;
+                                }
+                          
+                            case "pousar":
+                                {
+                                    Tello.land();
+                                    resposta.Speak("Ok, pousando o drone.");
+
+                                    break;
+                                }
+                            case "cambalhota":
+                                {
+                                    resposta.Speak("Girando");
+                                    break;
+                                }
+                          
+
+                        }
+                    }
 
                 }
                 catch (Exception ex)
@@ -259,7 +295,7 @@ namespace TelloVoice
                 }
             }
 
-            timer1.Enabled = false;
+          
             led.Visible = true;
 
         }
@@ -268,17 +304,72 @@ namespace TelloVoice
         {
             lblStatus.Text = "Carregando gramática... ";
             Application.DoEvents();
-
             resposta.Volume = 100;
             Gramatica();
 
 
+            IniciarTello();
         }
 
+        private void IniciarTello()
+        {
+            //subscribe to Tello connection events
+            Tello.onConnection += (Tello.ConnectionState newState) =>
+            {
+                if (newState == Tello.ConnectionState.Connected)
+                {
+                    //When connected update maxHeight to 5 meters
+                    Tello.setMaxHeight(15);
+                }
 
+                lblStatus.Invoke((MethodInvoker)delegate {
+                    lblStatus.Text = "Tello Conectado";
+                });
+                
+            };
+
+
+            Tello.onVideoData += Tello_onVideoData;
+
+            Tello.onUpdate += Tello_onUpdate;
+
+            Tello.startConnecting();
+
+
+        }
+
+        private void Tello_onVideoData(byte[] data)
+        {
+            //byte[] data = new byte[102400];
+            //int recv = server.ReceiveFrom(data, ref Remote);
+            MemoryStream ms = new MemoryStream(data);
+            Image returnImage = Image.FromStream(ms);
+
+            pictureBox2.Image = returnImage;
+           
+        }
+
+        private void Tello_onUpdate(int cmdId)
+        {
+
+            if (cmdId == 86)
+            {
+
+                lblStatus.Invoke((MethodInvoker)delegate {
+                     lblDados.Text = "Bateria: " + Tello.state.batteryPercentage.ToString() + "%\n";
+                     lblDados.Text += "Temperatura: " + Tello.state.temperatureHeight.ToString() + " Graus\n";
+                     lblDados.Text += "Altura: " + Tello.state.height.ToString() + "m\n";
+                     lblDados.Text += "Velocidade: " + Tello.state.flySpeed.ToString() + "cm/s\n";
+                });
+
+               
+            }
+        }
+        
         private void Form1_Load(object sender, EventArgs e)
         {
             lblStatus.Text = "";
+            lblDados.Text = "";
             Init();
         }
 
@@ -293,17 +384,6 @@ namespace TelloVoice
             Application.DoEvents();
         }
 
-        private void timer2_Tick(object sender, EventArgs e)
-        {
-            //var wrapper = SdkWrapper.Instance;
-
-            //TelloSdkStandard.actions.Action action = null;
-            //var resp = wrapper.BaseActions.QueryBattery().Execute();
-            //if (resp == SdkWrapper.SdkReponses.OK)
-            //{
-            //    lblBateria.Text = "Bateria:" +  wrapper.BaseActions.QueryBattery().ServerResponse +"%";
-            //}
-        }
-
+        
     }
 }
